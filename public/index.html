@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<link rel="stylesheet" href="./css/diary.css" />
+<title>샘플</title>
+</head>
+<body>
+
+    <div id="app">
+        <!-- 헤더 -->
+        <div id="header">
+            <h1>오늘</h1>
+            <div class="top-button">
+                <button type="button" v-if="isWriteMode" v-on:click="setContentMode" class="btn-content-mode"><i class="fas fa-list-ul fa-2x"></i><span class="blind">목록으로</span></button>
+            </div>
+        </div>
+        <!-- //헤더 -->
+        <!-- 컨테이너 -->
+        <div id="container">
+            <!-- 입력 모드 -->
+            <div id="writePage" v-if="isWriteMode">
+                <write-page v-bind:value="inputText"
+                            v-bind:thistime="thisTime"
+                            v-bind:ismodify="isModifyMode"
+                            v-bind:thispage="thisPage"
+                            v-on:@stopwrite="stopWrite"
+                            v-on:@submitaction="setItemToList">
+                </write-page>
+            </div>
+            <!-- //입력 모드 -->
+            <!-- 출력 모드 -->
+            <div id="diaryContents" v-if="isLoaded">
+                <!-- 입력 버튼 -->
+                <div class="btn-top">
+                    <button type="button" v-on:click="setWriteMode" class="btn-write"><i class="fas fa-plus fa-2x"></i><span class="blind">입력하기</span></button>
+                </div>
+                <!-- //입력 버튼 -->
+                <!-- 출력 : 개별 페이지 -->
+                <view-page v-if="isViewMode"
+                           v-bind:page="thisPage"
+                           v-on:@backtolist="backToList"
+                           v-on:@modifypage="modifyPage"
+                           v-on:@deleteitem="setItemToList">
+                </view-page>
+                <!-- //출력 : 개별 페이지 -->
+                <!-- 출력 : 전체 리스트 -->
+                <list-page v-else
+                           v-bind:data="itemList"
+                           v-on:@viewpage="viewPage">
+                </list-page>
+                <!-- //출력 : 전체 리스트 -->
+            </div>
+            <!-- //출력 모드 -->
+            <div id="loader" v-else>
+                <span class="icon">로딩 중...</span>
+            </div>       
+        </div>
+        <!-- //컨테이너 -->
+        
+    </div>
+
+<script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script type="module" src="./js/app.js"></script>
+
+</body>
+</html>
+
+<template id="write-page">
+    <div class="write-page">
+        <h2>
+            <span v-if="!isModify">{{timeValue.date}} {{timeValue.week}}</span>
+            <span v-else>{{thisPage.time.date}} {{thisPage.time.week}}</span>
+        </h2>
+        <div class="write-box">
+            <form>
+                <textarea v-model="inputValue" ref="inputTextArea" placeholder="내용을 입력하세요 (500자 제한)" maxlength="500" key="text-area"></textarea>
+                <div class="write-btns">
+                    <button type="submit" v-if="!isModify" v-on:click.prevent="submitAdd" class="btn-submit">
+                        <i class="fas fa-check fa-2x"></i><span class="blind">작성 완료</span>
+                    </button>
+                    <button type="submit" v-else v-on:click.prevent="submitModify" class="btn-submit">
+                        <i class="fas fa-check fa-2x"></i><span class="blind">수정 완료</span>
+                    </button>
+                    <button type="button" v-on:click="stopWrite" class="btn-text-cancel">
+                        <i class="fas fa-times fa-2x"></i><span class="blind">취소</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+
+<template id="view-page">
+    <div class="view-page">
+        <div class="page-top">
+            <button type="button" v-on:click="backToList" class="btn-back-to-list"><i class="fas fa-arrow-left fa-2x"></i><span class="blind">목록으로</span></button>
+            <h2>{{pageItem.time.date}} {{pageItem.time.week}}</h2>
+        </div>
+        <div class="page-text">
+            <div v-html="replaceStringWithHTML(pageItem.text)" class="text-inner"></div>
+            <p class="text-footer">
+                <span class="created-time">{{pageItem.time.createTime}}에 작성됨</span>
+            </p>
+        </div>
+        <div class="page-bottom">
+            <button type="button" v-on:click="modifyPage" class="btn-page-modify"><i class="fas fa-edit fa-2x"></i><span class="blind">수정</span></button>
+            <button type="button" v-on:click="deleteItem" class="btn-page-delete"><i class="fas fa-trash-alt fa-2x"></i><span class="blind">삭제</span></button>
+        </div>
+    </div>
+</template>
+
+<template id="list-page">
+    <div class="list-page">
+        <div class="item-list" v-if="itemList.length">
+            <ul>
+                <li v-for="item in itemList" v-bind:key="item.key">
+                    <a href="#item" v-on:click.prevent="viewPage(item)">
+                        <div class="item">
+                            <div class="d_date">{{item.time.date}}</div>
+                            <div class="d_summary">{{createSummary(item.text)}}</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="item-list-none" v-else>
+            <p>작성된 글이 없습니다.</p>
+        </div>
+    </div>
+</template>

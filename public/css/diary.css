@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+ol, ul {
+	list-style: none;
+}
+
+/* 페이지 기본설정 */
+html,body{position:relative;width:100%;height:100%;font-size:14px;line-height:1.25em;color:#000;font-family:"맑은 고딕","Malgun Gothic","굴림",Gulim,Helvetica,sans-serif;
+	-webkit-text-size-adjust:none
+}
+input,textarea,select,button,table{padding:0;margin:0;font-size:inherit;font-family:inherit;line-height:inherit}
+em,address{font-style:normal}
+a{color:inherit;text-decoration:none}
+hr{display:none}
+.blind{position:absolute;top:0;left:0;width:0;height:0;font-size:0;line-height:0;overflow:hidden;visibility:hidden}
+.clear_float:after{display:block;clear:both;content:".";width:0;height:0;font-size:0;line-height:0;overflow:hidden;visibility:hidden}
+.dN{display:none}
+button{-webkit-appearance:none}
+p{word-break:break-all}
+textarea{resize:none;outline:0}
+
+#app{position:relative;height:100%;overflow:hidden;background:#fff}
+
+header{position:fixed;top:0;left:0;width:100%;height:60px;border-bottom:1px solid #000;background:rgb(214,230,245);box-sizing:border-box;z-index:1000}
+header h1{color:#000;font-size:20px;line-height:59px;padding-left:20px}
+header .top-button{position:absolute;top:10px;right:20px}
+header .top-button button{width:39px;height:39px;border:0;background:rgba(255,255,255,0)}
+
+#container{position:absolute;top:60px;left:0;right:0;bottom:0}
+
+#diaryContents{height:100%}
+
+.btn-top{}
+.btn-top .btn-write{width:100%;height:60px;overflow:hidden;text-align:center;border:0;background:#fff}
+
+.list-page{position:relative;height:100%;overflow:hidden;overflow-y:auto}
+.list-page .item-list{border-top:1px solid #ddd}
+.list-page li{border-bottom:1px solid #ddd}
+.list-page li a{display:block}
+.list-page .item{position:relative;font-size:15px;line-height:24px;padding:18px 20px 18px 110px}
+.list-page .item .d_date{position:absolute;top:50%;left:20px;transform:translateY(-50%)}
+.list-page .item .d_summary{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.list-page .item-list-none{padding:100px 0}
+.list-page .item-list-none p{color:#000;font-size:16px;text-align:center}
+
+.view-page{position:relative;height:100%}
+.view-page .page-top{position:relative;height:70px}
+.view-page .page-top h2{height:70px;color:#000;font-size:20px;line-height:70px;text-align:center;white-space:nowrap}
+.view-page .page-top h2 .time{position:absolute;top:0;right:30px;color:#888;font-size:14px}
+.view-page .page-top .btn-back-to-list{position:absolute;top:20px;left:30px;width:30px;height:30px;border:0;background:#fff}
+.view-page .page-text{position:absolute;top:70px;left:30px;right:30px;bottom:70px;overflow:hidden;overflow-y:auto}
+.view-page .page-text .text-inner{color:#000;font-size:15px;line-height:1.6em;word-break:break-all}
+.view-page .page-text .text-footer{text-align:right;padding:30px 0 10px}
+.view-page .page-text .text-footer .created-time{color:#888;font-size:12px}
+.view-page .page-bottom{position:absolute;bottom:0;left:30px;right:30px;padding:20px 0}
+.view-page .page-bottom:after{clear:both;display:table;content:''}
+.view-page .page-bottom button{width:30px;height:30px;border:0;background:#fff}
+.view-page .page-bottom .btn-page-delete{float:left}
+.view-page .page-bottom .btn-page-modify{float:right}
+
+#writePage{position:relative;height:100%}
+.write-page{position:relative;height:100%}
+.write-page h2{position:relative;height:70px;color:#000;font-size:20px;line-height:70px;text-align:center}
+.write-page .write-box{position:absolute;top:70px;left:30px;right:30px;bottom:0}
+.write-page .write-box textarea{position:absolute;top:0;left:0;bottom:70px;width:100%;overflow:hidden;color:#000;font-size:15px;line-height:1.6em;word-break:break-all;border:0;background:#fff;box-sizing:border-box;-webkit-appearance:none}
+.write-page .write-box .write-btns{position:absolute;bottom:0;left:0;right:0;padding:20px 0}
+.write-page .write-box .write-btns:after{clear:both;display:table;content:''}
+.write-page .write-box .write-btns button{width:30px;height:30px;border:0;background:#fff}
+.write-page .write-box .write-btns .btn-text-cancel{float:left}
+.write-page .write-box .write-btns .btn-submit{float:right}
+
+#loader{position: absolute;top:50%;width:100%;transform:translateY(-50%)}
+#loader .icon{display:block;width:100px;height:100px;overflow:hidden;color:rgba(0,0,0,0);border:4px solid #000;background:#fff;margin:0 auto;box-sizing:border-box;animation:loader 3s linear infinite;transform:rotate(0)}
+@keyframes loader{
+	100% {transform:rotate(360deg)}
+}
